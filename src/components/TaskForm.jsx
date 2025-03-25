@@ -1,42 +1,55 @@
 // src/components/TaskForm.jsx
 import { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import '../datepicker.css';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function TaskForm({ addTask, closeModal, initialTask }) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('Outros');
-  const [priority, setPriority] = useState('Média');
-  const [status, setStatus] = useState('Pendente');
-  const [dueDate, setDueDate] = useState(null);
+  const [title, setTitle] = useState(initialTask ? initialTask.title : '');
+  const [description, setDescription] = useState(initialTask ? initialTask.description || '' : '');
+  const [category, setCategory] = useState(initialTask ? initialTask.category : 'Casa');
+  const [priority, setPriority] = useState(initialTask ? initialTask.priority : 'Baixa');
+  const [status, setStatus] = useState(initialTask ? initialTask.status : 'pendente');
+  const [dueDate, setDueDate] = useState(initialTask ? initialTask.dueDate || '' : '');
 
+  // Resetar os campos quando initialTask mudar (ex.: abrir o modal de "Nova Tarefa" depois de editar)
   useEffect(() => {
     if (initialTask) {
       setTitle(initialTask.title);
       setDescription(initialTask.description || '');
       setCategory(initialTask.category);
       setPriority(initialTask.priority);
-      setStatus(initialTask.status.charAt(0).toUpperCase() + initialTask.status.slice(1));
-      setDueDate(initialTask.dueDate ? new Date(initialTask.dueDate) : null);
+      setStatus(initialTask.status);
+      setDueDate(initialTask.dueDate || '');
+    } else {
+      // Resetar os campos quando initialTask é null (modo de criação)
+      setTitle('');
+      setDescription('');
+      setCategory('Casa');
+      setPriority('Baixa');
+      setStatus('pendente');
+      setDueDate('');
     }
   }, [initialTask]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title) {
-      addTask({
-        id: initialTask ? initialTask.id : Date.now().toString(),
-        title,
-        description,
-        category,
-        priority,
-        status: status.toLowerCase(),
-        dueDate: dueDate ? dueDate.toISOString().split('T')[0] : '',
-      });
-      closeModal();
-    }
+    const task = {
+      id: initialTask ? initialTask.id : uuidv4(),
+      title,
+      description,
+      category,
+      priority,
+      status,
+      dueDate,
+      order: initialTask ? initialTask.order : 0,
+    };
+    addTask(task);
+    // Resetar os campos após o envio
+    setTitle('');
+    setDescription('');
+    setCategory('Casa');
+    setPriority('Baixa');
+    setStatus('pendente');
+    setDueDate('');
   };
 
   return (
@@ -47,43 +60,44 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Digite o título da tarefa"
-          className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-black"
+          className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           required
         />
       </div>
+
       <div>
         <label className="block text-sm font-medium text-black">Descrição</label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Digite uma descrição para a tarefa"
-          className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-black"
+          className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           rows="3"
         />
       </div>
+
       <div className="flex space-x-4">
         <div className="flex-1">
           <label className="block text-sm font-medium text-black">Categoria</label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="border border-gray-300 p-2 rounded w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           >
-            <option value="Outros">Outros</option>
             <option value="Casa">Casa</option>
             <option value="Trabalho">Trabalho</option>
             <option value="Estudos">Estudos</option>
             <option value="Saúde">Saúde</option>
             <option value="Pessoal">Pessoal</option>
+            <option value="Outros">Outros</option>
           </select>
         </div>
+
         <div className="flex-1">
           <label className="block text-sm font-medium text-black">Prioridade</label>
           <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
-            className="border border-gray-300 p-2 rounded w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           >
             <option value="Baixa">Baixa</option>
             <option value="Média">Média</option>
@@ -91,42 +105,43 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
           </select>
         </div>
       </div>
+
       <div className="flex space-x-4">
         <div className="flex-1">
           <label className="block text-sm font-medium text-black">Status</label>
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="border border-gray-300 p-2 rounded w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+            className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           >
-            <option value="Pendente">Pendente</option>
-            <option value="Em andamento">Em andamento</option>
-            <option value="Concluída">Concluída</option>
+            <option value="pendente">Pendente</option>
+            <option value="em andamento">Em andamento</option>
+            <option value="concluída">Concluída</option>
           </select>
         </div>
+
         <div className="flex-1">
           <label className="block text-sm font-medium text-black">Data de Conclusão</label>
-          <DatePicker
-            selected={dueDate}
-            onChange={(date) => setDueDate(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText="dd/mm/aaaa"
-            className="border border-gray-300 p-2 rounded w-full bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
-            showPopperArrow={false}
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </div>
       </div>
+
       <div className="flex justify-end space-x-2">
         <button
           type="button"
           onClick={closeModal}
-          className="px-4 py-2 text-black border font-semibold border-gray-300 rounded bg-white hover:bg-gray-100 transition-colors duration-200"
+          className="border border-gray-200 px-4 py-2 rounded text-black hover:bg-gray-100 transition-colors duration-200"
         >
           Cancelar
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors duration-200"
+          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors duration-200"
         >
           {initialTask ? 'Salvar Alterações' : 'Criar Tarefa'}
         </button>

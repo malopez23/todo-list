@@ -73,7 +73,6 @@ export default function Tasks() {
 
       {/* Conteúdo centralizado (apenas header e filtros) */}
       <div className="max-w-2xl mx-auto px-4">
-        {/* Descrição e botão "Nova Tarefa" */}
         <div className="flex justify-between items-center mb-4">
           <div>
             <h2 className="text-lg font-semibold text-black">Minhas Tarefas</h2>
@@ -90,7 +89,6 @@ export default function Tasks() {
           </button>
         </div>
 
-        {/* Dropdowns de filtro */}
         <div className="flex space-x-4 mb-4">
           <div className="flex-1">
             <select
@@ -122,10 +120,10 @@ export default function Tasks() {
         </div>
       </div>
 
-      {/* Lista de tarefas com largura fluida */}
+      {/* Lista de tarefas em uma única lista */}
       <div className="px-4">
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md border">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-black">
@@ -152,27 +150,31 @@ export default function Tasks() {
                 ref={provided.innerRef}
                 className="w-full max-w-3xl mx-auto"
               >
-                {filteredTasks.map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={`w-full mb-2 transition-transform ${
-                          snapshot.isDragging ? 'shadow-lg' : ''
-                        }`}
-                      >
-                        <TaskCard
-                          task={task}
-                          index={index}
-                          onDelete={deleteTask}
-                          onEdit={editTask}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.map((task, index) => (
+                    <Draggable key={task.id} draggableId={task.id} index={index}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className={`w-full mb-2 transition-transform ${
+                            snapshot.isDragging ? 'shadow-lg' : ''
+                          }`}
+                        >
+                          <TaskCard
+                            task={task}
+                            index={index}
+                            onDelete={deleteTask}
+                            onEdit={editTask}
+                          />
+                        </div>
+                      )}
+                    </Draggable>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-center">Nenhuma tarefa encontrada.</p>
+                )}
                 {provided.placeholder}
               </div>
             )}
