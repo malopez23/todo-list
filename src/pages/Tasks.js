@@ -147,15 +147,21 @@ export default function Tasks() {
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="tasks">
             {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="w-full max-w-3xl mx-auto"
+              >
                 {filteredTasks.map((task, index) => (
                   <Draggable key={task.id} draggableId={task.id} index={index}>
-                    {(provided) => (
+                    {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        className="w-full max-w-3xl mx-auto mb-2"
+                        className={`w-full mb-2 transition-transform ${
+                          snapshot.isDragging ? 'shadow-lg' : ''
+                        }`}
                       >
                         <TaskCard
                           task={task}
