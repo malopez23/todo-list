@@ -19,7 +19,7 @@ Uma aplicação de lista de tarefas construída com React, Tailwind CSS e outras
 ### Passos
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/SEU_USUARIO/todo-list.git
+   git clone https://github.com/malopez23/todo-list.git
    cd todo-list
 
 2. Instale as dependências:
