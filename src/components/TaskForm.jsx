@@ -1,9 +1,10 @@
-import { useState } from 'react';
+// src/components/TaskForm.jsx
+import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../datepicker.css';
 
-export default function TaskForm({ addTask, closeModal }) {
+export default function TaskForm({ addTask, closeModal, initialTask }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Outros');
@@ -11,18 +12,28 @@ export default function TaskForm({ addTask, closeModal }) {
   const [status, setStatus] = useState('Pendente');
   const [dueDate, setDueDate] = useState(null);
 
+  useEffect(() => {
+    if (initialTask) {
+      setTitle(initialTask.title);
+      setDescription(initialTask.description || '');
+      setCategory(initialTask.category);
+      setPriority(initialTask.priority);
+      setStatus(initialTask.status.charAt(0).toUpperCase() + initialTask.status.slice(1));
+      setDueDate(initialTask.dueDate ? new Date(initialTask.dueDate) : null);
+    }
+  }, [initialTask]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title) {
       addTask({
-        id: Date.now().toString(),
+        id: initialTask ? initialTask.id : Date.now().toString(),
         title,
         description,
         category,
         priority,
         status: status.toLowerCase(),
         dueDate: dueDate ? dueDate.toISOString().split('T')[0] : '',
-        completed: false,
       });
       closeModal();
     }
@@ -117,7 +128,7 @@ export default function TaskForm({ addTask, closeModal }) {
           type="submit"
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors duration-200"
         >
-          Criar Tarefa
+          {initialTask ? 'Salvar Alterações' : 'Criar Tarefa'}
         </button>
       </div>
     </form>

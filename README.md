@@ -1,4 +1,4 @@
-# Todo List
+# To Do List
 
 Uma aplicação de lista de tarefas construída com React, Tailwind CSS e outras bibliotecas. Permite adicionar tarefas com título, descrição, categoria, prioridade, status e data de conclusão, com um modal estilizado e um calendário personalizado.
 
