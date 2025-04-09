@@ -1,52 +1,57 @@
-# To Do List
+# To-Do List
 
-Uma aplicação de lista de tarefas construída com React, Tailwind CSS e outras bibliotecas. Permite adicionar tarefas com título, descrição, categoria, prioridade, status e data de conclusão, com um modal estilizado e um calendário personalizado.
+A to-do list application built with React, Tailwind CSS, and other libraries. It allows users to add tasks with a title, description, category, priority, status, and due date, featuring a styled modal and a custom calendar.
 
-## Tecnologias Utilizadas
-- **React**: Biblioteca JavaScript para construção de interfaces.
-- **Tailwind CSS**: Framework CSS para estilização.
-- **Lucide React**: Biblioteca de ícones.
-- **React Datepicker**: Biblioteca para o calendário personalizado.
-- **@hello-pangea/dnd**: Biblioteca para drag-and-drop.
-- **LocalStorage**: Para persistência de dados no navegador.
+## Live Demo
 
-## Como Rodar o Projeto
+You can access the live version of the app on Vercel:  
+🔗 [To-Do List on Vercel](https://todo-list-six-alpha-63.vercel.app/)
 
-### Pré-requisitos
-- Node.js (versão 14 ou superior) instalado.
-- npm (geralmente vem com o Node.js).
+## Technologies Used
+- **React**: JavaScript library for building user interfaces.
+- **Tailwind CSS**: CSS framework for styling.
+- **Lucide React**: Icon library.
+- **React Datepicker**: Library for the custom calendar.
+- **@hello-pangea/dnd**: Library for drag-and-drop functionality.
+- **LocalStorage**: For data persistence in the browser.
 
-### Passos
-1. Clone o repositório:
+## How to Run the Project
+
+### Prerequisites
+- Node.js (version 14 or higher) installed.
+- npm (usually comes with Node.js).
+
+### Steps
+1. Clone the repository:
    ```bash
    git clone https://github.com/malopez23/todo-list.git
    cd todo-list
 
-2. Instale as dependências:
+2. Install the dependencies:
     ```bash
     npm install
 
-3. Inicie o servidor de desenvolvimento:
+3. Start the development server:
     ```bash
     npm start
 
-4. Abra o navegador e acesse:
+4. Open your browser and go to:
     ```bash
     http://localhost:3000
 
-### Funcionalidades
-- Adicionar tarefas com título, descrição, categoria, prioridade, status e data de conclusão.
-- Reorganizar tarefas com drag-and-drop.
-- Persistência de tarefas no LocalStorage.
-- Modal estilizado para adicionar tarefas.
-- Calendário personalizado com react-datepicker.
+## Features
+- Add tasks with a title, description, category, priority, status, and due date.
+- Reorder tasks using drag-and-drop.
+- Task persistence in LocalStorage.
+- Styled modal for adding tasks.
+- Custom calendar with react-datepicker.
 
-### Estrutura do Projeto
-- src/App.js: Componente principal da aplicação.
-- src/pages/Tasks.js: Página principal que lista as tarefas e gerencia o modal.
-- src/components/TaskForm.jsx: Formulário para adicionar tarefas.
-- src/components/TaskCard.jsx: Componente que exibe cada tarefa.
-- src/datepicker.css: Estilização personalizada do calendário.
+## Project Structure
+- src/App.js: Main application component.
+- src/pages/Tasks.js: Main page that lists tasks and manages the modal.
+- src/components/TaskForm.jsx: Form for adding tasks.
+- src/components/TaskCard.jsx: Component that displays each task.
+- src/datepicker.css: Custom styling for the calendar.
 
-## Contribuição
-Sinta-se à vontade para abrir issues ou enviar pull requests com melhorias!
+## Contributing
+Feel free to open issues or submit pull requests with improvements!
