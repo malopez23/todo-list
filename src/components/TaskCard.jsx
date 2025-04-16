@@ -1,4 +1,3 @@
-// src/components/TaskCard.jsx
 import { Edit, Trash2, Check } from 'lucide-react';
 
 export default function TaskCard({ task, index, onDelete, onEdit }) {
@@ -24,6 +23,13 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
     concluída: 'bg-gray-50 text-gray-600',
   };
 
+  // Função pra formatar a data no formato DD/MM/YYYY
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Sem data';
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <div className="bg-white/90 p-4 rounded-lg shadow-sm border border-indigo-50 flex items-center backdrop-blur-sm w-full">
       {/* Título e descrição */}
@@ -47,10 +53,7 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
           </span>
           {task.dueDate && (
             <span className="text-xs px-2 py-1 rounded-full bg-purple-50 text-purple-600">
-              {new Date(task.dueDate).toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'short',
-              })}
+              {formatDate(task.dueDate)}
             </span>
           )}
           <span

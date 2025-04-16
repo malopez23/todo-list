@@ -1,6 +1,6 @@
-// src/components/TaskForm.jsx
-import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function TaskForm({ addTask, closeModal, initialTask }) {
   const [title, setTitle] = useState(initialTask ? initialTask.title : '');
@@ -8,9 +8,8 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
   const [category, setCategory] = useState(initialTask ? initialTask.category : 'Casa');
   const [priority, setPriority] = useState(initialTask ? initialTask.priority : 'Baixa');
   const [status, setStatus] = useState(initialTask ? initialTask.status : 'pendente');
-  const [dueDate, setDueDate] = useState(initialTask ? initialTask.dueDate || '' : '');
+  const [dueDate, setDueDate] = useState(initialTask ? initialTask.dueDate || null : null);
 
-  // Resetar os campos quando initialTask mudar (ex.: abrir o modal de "Nova Tarefa" depois de editar)
   useEffect(() => {
     if (initialTask) {
       setTitle(initialTask.title);
@@ -18,22 +17,39 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
       setCategory(initialTask.category);
       setPriority(initialTask.priority);
       setStatus(initialTask.status);
-      setDueDate(initialTask.dueDate || '');
+      setDueDate(initialTask.dueDate || null);
     } else {
-      // Resetar os campos quando initialTask é null (modo de criação)
       setTitle('');
       setDescription('');
       setCategory('Casa');
       setPriority('Baixa');
       setStatus('pendente');
-      setDueDate('');
+      setDueDate(null);
     }
   }, [initialTask]);
+
+  const handleDateChange = (date) => {
+    if (!date) {
+      setDueDate(null);
+      return;
+    }
+    // Converter a data pra YYYY-MM-DD
+    const formattedDate = date.toISOString().split('T')[0];
+    setDueDate(formattedDate);
+  };
+
+  // Função pra criar um objeto Date a partir de uma string YYYY-MM-DD, ajustando pro fuso horário local
+  const parseDateLocal = (dateString) => {
+    if (!dateString) return null;
+    const [year, month, day] = dateString.split('-');
+    // Criar a data como se fosse no fuso horário local (sem ajuste pra UTC)
+    return new Date(year, month - 1, day);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const task = {
-      id: initialTask ? initialTask.id : uuidv4(),
+      id: initialTask ? initialTask.id : Date.now(),
       title,
       description,
       category,
@@ -43,13 +59,13 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
       order: initialTask ? initialTask.order : 0,
     };
     addTask(task);
-    // Resetar os campos após o envio
     setTitle('');
     setDescription('');
     setCategory('Casa');
     setPriority('Baixa');
     setStatus('pendente');
-    setDueDate('');
+    setDueDate(null);
+    closeModal();
   };
 
   return (
@@ -122,10 +138,11 @@ export default function TaskForm({ addTask, closeModal, initialTask }) {
 
         <div className="flex-1">
           <label className="block text-sm font-medium text-black">Data de Conclusão</label>
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
+          <DatePicker
+            selected={parseDateLocal(dueDate)}
+            onChange={handleDateChange}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Selecione a data"
             className="border border-gray-200 p-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </div>
